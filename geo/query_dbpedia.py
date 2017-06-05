@@ -60,9 +60,9 @@ def json_to_dictionary(results):
             {
                 'name' : unicode(result['name']['value']),
                 'label' : get_value_of_key(result, 'label', 'value'),
-                'comment' : get_value_of_key(result, 'comment', 'value')
-                'latitude' : result['lat']['value']
-                'longitude' : result['long']['value']
+                'comment' : get_value_of_key(result, 'comment', 'value'),
+                'latitude' : result['lat']['value'],
+                'longitude' : result['long']['value'],
             }
         )
     return list_of_results
@@ -76,4 +76,5 @@ def get_companies(latitude, longitude, tolerance, language):
 
     results = send_query(top, bottom, left, right, language)
 
+    # Conver json from dbpedia to json that is suitable for d3.js
     return json.dumps(json_to_dictionary(results))

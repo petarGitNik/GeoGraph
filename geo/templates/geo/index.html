@@ -38,26 +38,26 @@ d3.json("{% static 'geo/json/world-110m2.json' %}", function(topology) {
 		.append("path").attr("d", path)
 
   // Add results to map (map is loaded then the results are added)
-	d3.json("{% url 'geo:get_companies' %}", function(data) {
+	d3.json("{{ json_file }}", function(data) {
 		g.selectAll("circle")
 			.data(data)
 			.enter()
 			.append("a")
 				.attr("href", function(d) {
-					return "https://www.google.com/search?q="+d.city;
+					return d.name;
 				})
 			.append("svg:circle")
 			.attr("cx", function(d) {
-				return projection([d.lon, d.lat])[0];
+				return projection([d.longitude, d.latitude])[0];
 			})
 			.attr("cy", function(d) {
-				return projection([d.lon, d.lat])[1];
+				return projection([d.longitude, d.latitude])[1];
 			})
 			.attr("r", 5)
 			.style("fill", "red")
 			.append("svg:title")
 				.text(function(d) {
-					return "This city has code " + d.code + " and is in coutry " + d.country;
+					return "Label: " + d.label + "\nComment: " + d.comment;
 				});
 	});
 
@@ -77,13 +77,14 @@ svg.call(zoom)
 
 <br>
 <div class="form">
-<form action="#" method="post">
-	Latitude: <input type="number" step="any" min="-90" max="90" name="">
-	Longitude: <input type="number" step="any" min="-180" max="180" name="">
-	Tolerance [deg]: <input type="number" step="any" name="">
-	Language [optional] <select>
-		<option value="default">Default</option>
-		<option value="en">English</option>
+<form action="{% url 'geo:index' %}" method="post">
+  {% csrf_token %}
+	Latitude: <input value="0.0" type="number" step="any" min="-90" max="90" name="latitude">
+	Longitude: <input value="0.0" type="number" step="any" min="-180" max="180" name="longitude">
+	Tolerance [deg]: <input value="0.0" type="number" step="any" name="tolerance">
+	Language [optional] <select name="language">
+		  <option value="default">Default</option>
+		  <option value="en">English</option>
   		<option value="fr">French</option>
   		<option value="de">German</option>
   		<option value="ru">Russian</option>
