@@ -6,7 +6,6 @@ from django.http import JsonResponse
 from .query_dbpedia import get_companies
 import json
 
-# Create your views here.
 def index(request, latitude = 0.0, longitude = 0.0, tolerance = 0.0, language = 'default'):
     """
     Load the homepage. If user supplies input arguments, query dbpedia, 'parse'
@@ -26,5 +25,5 @@ def index(request, latitude = 0.0, longitude = 0.0, tolerance = 0.0, language = 
             'json_file' : 'media/json_file.json',
         })
     return render(request, 'geo/index.html', {
-        'json_file' : 'media/json_file.json',
+        'json_file' : 'media/default_file.json',
     })
