@@ -26,5 +26,5 @@ def index(request, latitude = 0.0, longitude = 0.0, tolerance = 0.0, language = 
             'json_file' : 'media/json_file.json',
         })
     return render(request, 'geo/index.html', {
-        'json_file' : None
+        'json_file' : 'media/json_file.json',
     })
