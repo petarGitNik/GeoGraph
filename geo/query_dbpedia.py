@@ -3,6 +3,11 @@ from SPARQLWrapper import JSON
 import json
 
 def set_language_filters(language):
+    """
+    If the language tag is set to default return a list of empty strings. Otherwise,
+    return language filters as strings. These strings are injected in in SPARQL
+    query.
+    """
     if language == 'default':
         return ['', '']
     filter_lang_label = "filter(lang(?label) = \'" + language + "\')\n"
@@ -10,6 +15,9 @@ def set_language_filters(language):
     return [filter_lang_label, filter_lang_comment]
 
 def send_query(top, bottom, left, right, language):
+    """
+    Construct a SPARQL query, and send it to dbpedia. Return results as JSON object.
+    """
     sparql = SPARQLWrapper('http://dbpedia.org/sparql')
 
     # Prepare filters
@@ -49,11 +57,18 @@ def send_query(top, bottom, left, right, language):
     return results
 
 def get_value_of_key(dictionary, key, value):
+    """
+    If JSON returned from dbpedia does not contain values for label and comment,
+    return a message that no value was found.
+    """
     if dictionary.get(key, False):
         return unicode(dictionary[key][value])
     return 'No value found in dbpedia'
 
 def json_to_dictionary(results):
+    """
+    Conver JSON returned from dbpedia into a list of dictionaries.
+    """
     list_of_results = []
     for result in results['results']['bindings']:
         list_of_results.append(
@@ -61,13 +76,16 @@ def json_to_dictionary(results):
                 'name' : unicode(result['name']['value']),
                 'label' : get_value_of_key(result, 'label', 'value'),
                 'comment' : get_value_of_key(result, 'comment', 'value'),
-                'latitude' : result['lat']['value'],
-                'longitude' : result['long']['value'],
+                'latitude' : float(result['lat']['value']),
+                'longitude' : float(result['long']['value']),
             }
         )
     return list_of_results
 
 def get_companies(latitude, longitude, tolerance, language):
+    """
+    Convert JSON from dbpedia to JSON for plotting using d3.js
+    """
     # Prepare boundaries
     top = latitude + tolerance
     bottom = latitude - tolerance

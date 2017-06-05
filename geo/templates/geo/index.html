@@ -26,7 +26,7 @@ var svg = d3.select("body").append("svg").attr("width", width).attr("height", he
 //creat a path generator, this is used to specify a projection type i.e. Mercator projection
 var path = d3.geo.path().projection(projection);
 
-//append 'g' to svg
+//append element 'g' to svg
 var g = svg.append("g");
 
 //draw a map
@@ -36,6 +36,9 @@ d3.json("{% static 'geo/json/world-110m2.json' %}", function(topology) {
 	g.selectAll("path")
 		.data(topojson.object(topology, topology.objects.countries).geometries).enter()
 		.append("path").attr("d", path)
+
+  //mozda za brisanje
+  //companies = {{ json_file|escapejs }}
 
   // Add results to map (map is loaded then the results are added)
 	d3.json("{{ json_file }}", function(data) {
@@ -81,7 +84,7 @@ svg.call(zoom)
   {% csrf_token %}
 	Latitude: <input value="0.0" type="number" step="any" min="-90" max="90" name="latitude">
 	Longitude: <input value="0.0" type="number" step="any" min="-180" max="180" name="longitude">
-	Tolerance [deg]: <input value="0.0" type="number" step="any" name="tolerance">
+	Tolerance [deg]: <input value="0.0" type="number" step="any" min="0" name="tolerance">
 	Language [optional] <select name="language">
 		  <option value="default">Default</option>
 		  <option value="en">English</option>
@@ -89,7 +92,7 @@ svg.call(zoom)
   		<option value="de">German</option>
   		<option value="ru">Russian</option>
 	</select>
-	<input type="submit" name="" value="Get companies">
+	<input type="submit" value="Get companies">
 </form>
 </div>
 
