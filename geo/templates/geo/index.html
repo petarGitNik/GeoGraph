@@ -35,10 +35,7 @@ var g = svg.append("g");
 d3.json("{% static 'geo/json/world-110m2.json' %}", function(topology) {
 	g.selectAll("path")
 		.data(topojson.object(topology, topology.objects.countries).geometries).enter()
-		.append("path").attr("d", path)
-
-  //mozda za brisanje
-  //companies = {{ json_file|escapejs }}
+		.append("path").attr("d", path);
 
   // Add results to map (map is loaded then the results are added)
 	d3.json("{{ json_file }}", function(data) {
