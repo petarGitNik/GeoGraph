@@ -1,0 +1,19 @@
+svg {
+	display: block;
+	margin: auto;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+}
+
+path {
+  stroke: width;
+  stroke-width: 0.25px;
+  fill: gray;
+}
+
+.form {
+	width: 70%;
+	display: block;
+	margin: auto;
+}
